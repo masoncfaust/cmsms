@@ -1,0 +1,25 @@
+services:
+  app:
+    image: oled01/cmsms:2.2.16
+    command: sh -c "yarn install && yarn run dev"
+    ports:
+      - 80:80
+    working_dir: /app
+    volumes:
+      - ./:/app
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: secret
+      MYSQL_DB: todos
+
+  mysql:
+    image: oled01/cmsms:2.2.16
+    volumes:
+      - todo-mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: todos
+
+volumes:
+  todo-mysql-data:
