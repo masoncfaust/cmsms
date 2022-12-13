@@ -1,25 +1,29 @@
-services:
-  app:
-    image: oled01/cmsms:2.2.16
-    command: sh -c "yarn install && yarn run dev"
-    ports:
-      - 80:80
-    working_dir: /app
-    volumes:
-      - ./:/app
-    environment:
-      MYSQL_HOST: mysql
-      MYSQL_USER: root
-      MYSQL_PASSWORD: secret
-      MYSQL_DB: todos
-
-  mysql:
-    image: oled01/cmsms:2.2.16
-    volumes:
-      - todo-mysql-data:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: secret
-      MYSQL_DATABASE: todos
+version: '3.5'
 
 volumes:
-  todo-mysql-data:
+  db:
+  cms_modules:
+  cms_uploads:
+
+services:
+db:
+  image: mariadb
+  command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+  restart: always
+  volumes:
+    - db:/var/lib/mysql
+  environment:
+    - MYSQL_ROOT_PASSWORD=
+    - MYSQL_PASSWORD=
+    - MYSQL_DATABASE=cmsms
+    - MYSQL_USER=cmsms
+  cmsms:
+     image: mhzawadi/cmsms-docker:2.2.9-amd64
+     volumes:
+       - cms_modules:/var/www/html/modules
+       - cms_uploads:/var/www/html/uploads
+     restart: always
+     ports:
+       - 80:80
+     environment:
+       - REMOVE_INSTALL_FOLDER=true
