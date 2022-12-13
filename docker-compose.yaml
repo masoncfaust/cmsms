@@ -6,24 +6,24 @@ volumes:
   cms_uploads:
 
 services:
-db:
-  image: mariadb
-  command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
-  restart: always
-  volumes:
-    - db:/var/lib/mysql
-  environment:
-    - MYSQL_ROOT_PASSWORD=
-    - MYSQL_PASSWORD=
-    - MYSQL_DATABASE=cmsms
-    - MYSQL_USER=cmsms
-  cmsms:
-     image: mhzawadi/cmsms-docker:2.2.9-amd64
-     volumes:
-       - cms_modules:/var/www/html/modules
-       - cms_uploads:/var/www/html/uploads
-     restart: always
-     ports:
-       - 80:80
-     environment:
-       - REMOVE_INSTALL_FOLDER=true
+  db:
+    image: mariadb
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    restart: always
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_PASSWORD=
+      - MYSQL_DATABASE=cmsms
+      - MYSQL_USER=cmsms
+    cmsms:
+      image: mhzawadi/cmsms-docker:2.2.9-amd64
+      volumes:
+        - cms_modules:/var/www/html/modules
+        - cms_uploads:/var/www/html/uploads
+      restart: always
+      ports:
+        - 80:80
+      environment:
+        - REMOVE_INSTALL_FOLDER=true
